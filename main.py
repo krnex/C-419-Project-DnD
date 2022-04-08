@@ -23,6 +23,7 @@ def prediction_text(character, prediction, whole_data, user_data, lines, col):
                 return_text.append(lines[2])
         else:
             return_text.append(lines[1].format(get_character_name(prediction),get_character_name(character)))
+    print(return_text[0] + ';', end = '')
     return return_text
 
 # Get the names of the characters, returns a better version if it exists
@@ -35,6 +36,7 @@ def get_character_name(character_selected):
 
     return classes_name
 
+# Gets average of a row given some data
 def get_average(data, col):
     return data[data.columns[[col]]].mean()[0]
 
@@ -59,7 +61,12 @@ def main(file_name, character_selected = "dwarf_f"):
     character_catagories = df.label.unique()
 
     # Gets the users data
-    to_predict = pd.read_csv("./userfeatures.csv",sep=',')
+    try:
+        to_predict = pd.read_csv("./userfeatures.csv",sep=',')
+    except:
+        print("Error: No userfeatures.csv file. Add a .wav file to the directory and try again.")
+        return
+
     predictions = {}
 
     for feature in cols:
@@ -90,8 +97,8 @@ def main(file_name, character_selected = "dwarf_f"):
         lines[feature],
         0)
         
-    print(predictions)
-    print(final_texts)
+    #print(predictions)
+    #print(final_texts)
     return(final_texts)
 
 if __name__ == '__main__':
